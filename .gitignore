@@ -1,0 +1,11 @@
+# folders
+datasets/
+models/
+results/
+output/
+configs/
+exports/
+# python compiles
+__pycache__/
+scripts/test.py
+models.zip

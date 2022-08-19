@@ -1,0 +1,38 @@
+{
+
+"camera_1": {
+"id": "810512062502",
+"rgb": "../datasets/sps/rgb/0010.png",
+"depth": "../datasets/sps/depth/0.png",
+"result": "./test",
+"camera_roi": {
+"enable": true,
+"start_x": 200,
+"start_y": 70,
+"roi_height": 220,
+"roi_width": 295,
+"target_height": 480,
+"target_width": 640,
+"scale_x": 1.67,
+"scale_y": 1.14
+}
+},
+
+"camera_2": {
+"id": "810512061204",
+"rgb": "../datasets/sps/rgb/0001.png",
+"depth": "../datasets/sps/depth/1.png",
+"result": "./test",
+"camera_roi": {
+"enable": false,
+"start_x": 34,
+"start_y": 120,
+"roi_height": 200,
+"roi_width": 400,
+"target_height": 480,
+"target_width": 640,
+"scale_x": 1.67,
+"scale_y": 1.14
+}
+}
+}

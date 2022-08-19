@@ -1,0 +1,32 @@
+nvidia lr: 0.02, max-iter: 1700; dopose lr: 0.02, max-iter: 500; batch_size: 8; warmup_iters: 1000; AP: 19.6
+nvidia lr: 0.02, max-iter: 150; dopose lr: 0.02, max-iter: 50; batch_size: 8; warmup_iters: 1000;  AP: 2.4
+nvidia lr: 0.02, max-iter: 1200; dopose lr: 0.02, max-iter: 300; batch_size: 8; warmup_iters: 1000;  AP: 18.04
+nvidia lr: 0.002, max-iter: 2500; dopose lr: 0.0002, max-iter: 1000; batch_size: 8; warmup_iters: 1000;  AP: dnf
+nvidia lr: 0.0002, max-iter: 2500; dopose lr: 0.00002, max-iter: 1000; batch_size: 8; warmup_iters: 1000;  AP: 14.95
+nvidia lr: 0.000002, max-iter: 2500; dopose lr: 0.0000002, max-iter: 1000; batch_size: 8; warmup_iters: 1000;  AP: nan
+nvidia lr: 0.00002, max-iter: 2500; dopose lr: 0.00002, max-iter: 1000; batch_size: 16; warmup_iters: 1000;  AP: 28.8
+nvidia lr: 0.00004, max-iter: 2500; dopose lr: 0.00004, max-iter: 1000; batch_size: 16; warmup_iters: 1000;  AP: 35.585
+nvidia lr: 0.00008, max-iter: 2500; dopose lr: 0.00008, max-iter: 1000; batch_size: 16; warmup_iters: 1000;  AP: 25.5
+nvidia lr: 0.00004, max-iter: 4000; dopose lr: 0.00004, max-iter: 1500; batch_size: 16; warmup_iters: 1000;  AP: 27.00
+nvidia lr: 0.00004, max-iter: 2200; dopose lr: 0.00004, max-iter: 800; batch_size: 16; warmup_iters: 1000;  AP: 30.79
+nvidia lr: 0.000025, max-iter: 2200; dopose lr: 0.000025, max-iter: 800; batch_size: 16; warmup_iters: 1000;  AP: 31.48
+nvidia lr: 0.000025, max-iter: 2200; dopose lr: 0.000025, max-iter: 800; batch_size: 16; warmup_iters: 100; AP: 36.131
+nvidia lr: 0.000025, max-iter: 1700; dopose lr: 0.000025, max-iter: 500; batch_size: 16; warmup_iters: 100; AP: 24.68
+nvidia lr: 0.000025, max-iter: 3000; dopose lr: 0.000025, max-iter: 800; batch_size: 16; warmup_iters: 100; AP: 33.054
+nvidia lr: 0.000025, max-iter: 1800; dopose lr: 0.000025, max-iter: 800; batch_size: 16; warmup_iters: 100; AP: 33.545
+nvidia lr: 0.000025, max-iter: 1800; dopose lr: 0.000025, max-iter: 700; batch_size: 16; warmup_iters: 100; AP: 33.545
+nvidia lr: 0.000025, max-iter: 1800; dopose lr: 0.000025, max-iter: 1800; batch_size: 16; warmup_iters: 100; AP: 35.198
+nvidia lr: 0.000025, max-iter: 1800; dopose lr: 0.000025, max-iter: 2500; batch_size: 16; warmup_iters: 100; AP: 37.86, 33.02
+nvidia lr: 0.000025, max-iter: 1800; dopose lr: 0.000025, max-iter: 3000; batch_size: 16; warmup_iters: 100; AP: 35.81
+nvidia lr: 0.000025, max-iter: 1800; dopose lr: 0.000025, max-iter: 2500; batch_size: 16; warmup_iters: 100; solver_steps: 1667 AP: 30.041
+nvidia lr: 0.000025, max-iter: 1800; dopose lr: 0.000025, max-iter: 2500; batch_size: 16; warmup_iters: 100; solver_steps: 2200 AP: 32.94
+nvidia lr: 0.000025, max-iter: 1800; dopose lr: 0.000025, max-iter: 2500; batch_size: 16; warmup_iters: 100; solver_steps: 2200 only dopose AP: 33.802
+nvidia lr: 0.000025, max-iter: 1800; dopose lr: 0.000025, max-iter: 2300; batch_size: 16; warmup_iters: 100; AP: 33.885
+nvidia lr: 0.000025, max-iter: 1800; dopose lr: 0.000025, max-iter: 2300; sps-synthetic lr: 0.000025, max-iter: 300; batch_size: 16; warmup_iters: 100; AP: 72
+IAS base model; sps-synthetic lr: 0.000025, max-iter: 600; batch_size: 16; warmup_iters: 100; AP: 62.593
+sps-synthetic lr: 0.000025, max-iter: 2000; batch_size: 16; warmup_iters: 100; AP: 57.432
+nvidia lr: 0.000025, max-iter: 1800; batch_size: 16; warmup_iters: 100; AP: 1.782
+dopose lr: 0.000025, max-iter: 2300; batch_size: 16; warmup_iters: 100; AP: 33.518
+dopose lr: 0.000025, max-iter: 2300; sps-synthetic lr: 0.000025, max-iter: 300; batch_size: 16; warmup_iters: 100; AP: 62.994
+dopose lr: 0.000025, max-iter: 2300; sps-synthetic lr: 0.000025, max-iter: 600; batch_size: 16; warmup_iters: 100; AP: 60.870
+
