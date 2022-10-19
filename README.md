@@ -13,7 +13,6 @@ Please make sure you have a CUDA enabled NVIDIA GPU and CUDA version 11.3 or abo
 
 ### Clone repository
 ```
-git clone git@ssh.dev.azure.com:v3/abb-robotics-sanjose/ROME/ias
 cd ias
 ```
 
@@ -51,8 +50,6 @@ python -m pip install -e detectron2
 ```
 
 ## Download Models
-
-**This model is temporary. Will be replaced with ABB models after training loop is complete**
 
 ### Download IAS model
 ```
