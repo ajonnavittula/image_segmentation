@@ -1,11 +1,10 @@
 ## ROME 2.0 Instance Segmentation
 
-This repository contains the instance segmentation network architecture and training loop for ROME 2.0
+This repository contains the instance segmentation network architecture and training loop that uses detectron2
 
 
 #### TODO
-- Replace with ABB specific model download links and instructions
-
+- 
 
 ## Installation
 
