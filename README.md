@@ -1,4 +1,4 @@
-## ROME 2.0 Instance Segmentation
+## Instance Segmentation
 
 This repository contains the instance segmentation network architecture and training loop that uses detectron2
 
