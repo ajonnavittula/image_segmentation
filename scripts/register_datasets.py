@@ -16,7 +16,8 @@ from pycocotools import coco as cocoapi
 from detectron2.data.datasets import register_coco_instances
 from detectron2.data import DatasetCatalog, MetadataCatalog
 from detectron2.utils.visualizer import Visualizer
-
+from copy import copy
+import json
 
 """ 
 Register COCO format datasets.
@@ -25,6 +26,22 @@ See create_coco_json.py for info on how to create COCO format dataset.
 
 # register_coco_instances("sps_dataset_train", {}, "/home/ws1/Downloads/sps.json","/home/ws1/Downloads/sps")
 # register_coco_instances("nvidia_train", {}, "/media/ws1/Data3/datasets/fat/Annotations/036_wood_block_16k.json","/media/ws1/Data3/datasets/fat")
+
+def register_ycbv_dataset(path):
+    path = os.path.join(path, "train_pbr")
+    registered_datasets = []
+    for folder in os.scandir(path):
+        folder = os.path.join(path, "000000")
+        dataset_name = "ycbv_" + os.path.basename(folder) + "_train"
+        annotation = os.path.join(folder, "scene_gt_coco.json")
+        # ann = json.load(open(annotation, "r"))
+        # print(annotation)
+        # aa
+        if not dataset_name in DatasetCatalog.list():
+            register_coco_instances(dataset_name, {}, annotation, folder)
+            registered_datasets.append(dataset_name)
+            break
+    return registered_datasets
 
 def register_nvidia_fat_dataset(path):
     """

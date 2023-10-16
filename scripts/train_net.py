@@ -9,7 +9,7 @@ from detectron2.config import get_cfg
 from detectron2.utils.visualizer import Visualizer
 from detectron2.data.datasets import register_coco_instances
 from detectron2.data import MetadataCatalog, DatasetCatalog, build_detection_test_loader, DatasetMapper
-from register_datasets import register_dopose_dataset, register_nvidia_fat_dataset, register_sps_dataset # registers dataset for detectron2. See register_datasets.py for more information
+from register_datasets import register_dopose_dataset, register_nvidia_fat_dataset, register_sps_dataset, register_ycbv_dataset # registers dataset for detectron2. See register_datasets.py for more information
 from detectron2.evaluation import COCOEvaluator, inference_on_dataset
 from detectron2.utils.logger import log_every_n_seconds
 import detectron2.utils.comm as comm
@@ -29,19 +29,14 @@ def make_cfg(args, cfg_type="train", dataset=None):
 
     # Register all datasets
     if cfg_type == "train":
-        _ = register_nvidia_fat_dataset(os.path.join(args.data_path, "fat"))
-        _ = register_dopose_dataset(os.path.join(args.data_path, "doPose"))
-        _ = register_sps_dataset(os.path.join(args.data_path, "sps_synthetic"))
-    cfg.DATASETS.TRAIN = tuple(dataset)
+        # _ = register_nvidia_fat_dataset(os.path.join(args.data_path, "fat"))
+        # _ = register_dopose_dataset(os.path.join(args.data_path, "doPose"))
+        # _ = register_sps_dataset(os.path.join(args.data_path, "sps_synthetic"))
+        registered_datasets = register_ycbv_dataset(os.path.join(args.data_path, "ycbv"))
+    cfg.DATASETS.TRAIN = tuple(registered_datasets)#tuple(dataset)
     # add bitmask argument for COCO dataset with segmentations stored in RLE format (see: https://detectron2.readthedocs.io/en/latest/tutorials/datasets.html#standard-dataset-dicts)
-    if args.dataset == "nvidia" or args.dataset == "dopose":
-        cfg.INPUT.MASK_FORMAT = "bitmask"
-    if args.dataset == "nvidia":
-        cfg.DATASETS.TEST = ()
-    elif args.dataset == "dopose":
-        cfg.DATASETS.TEST = ()
-    else:
-        cfg.DATASETS.TEST = ()
+    cfg.INPUT.MASK_FORMAT = "bitmask"
+    cfg.DATASETS.TEST = ()
     # cfg.TEST.EVAL_PERIOD = 500
     cfg.DATALOADER.NUM_WORKERS = 2
 
@@ -49,14 +44,11 @@ def make_cfg(args, cfg_type="train", dataset=None):
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = 1 # instances are agnostic
 
 
-    cfg.SOLVER.IMS_PER_BATCH = args.num_gpus * 4  # This is the real "batch size" commonly known to deep learning people
+    cfg.SOLVER.IMS_PER_BATCH = args.num_gpus * 1  # This is the real "batch size" commonly known to deep learning people
     cfg.SOLVER.BASE_LR = args.lr  # pick a good LR
     cfg.SOLVER.WARMUP_ITERS = 100
     cfg.SOLVER.MAX_ITER = args.max_iter    
-    if args.dataset == "dopose":
-        cfg.SOLVER.STEPS = ()
-    else:
-        cfg.SOLVER.STEPS = ()
+    cfg.SOLVER.STEPS = ()
     cfg.SOLVER.CHECKPOINT_PERIOD = int(cfg.SOLVER.MAX_ITER / 5) # Checkpoint every 20%
 
     cfg.OUTPUT_DIR = "../output/"
@@ -99,66 +91,6 @@ class MyTrainer(DefaultTrainer):
     #     ))
     #     return hooks
 
-# class LossEvalHook(HookBase):
-#     def __init__(self, eval_period, model, data_loader):
-#         self._model = model
-#         self._period = eval_period
-#         self._data_loader = data_loader
-    
-#     def _do_loss_eval(self):
-#         # Copying inference_on_dataset from evaluator.py
-#         total = len(self._data_loader)
-#         num_warmup = min(5, total - 1)
-            
-#         start_time = time.perf_counter()
-#         total_compute_time = 0
-#         losses = []
-#         for idx, inputs in enumerate(self._data_loader):            
-#             if idx == num_warmup:
-#                 start_time = time.perf_counter()
-#                 total_compute_time = 0
-#             start_compute_time = time.perf_counter()
-#             if torch.cuda.is_available():
-#                 torch.cuda.synchronize()
-#             total_compute_time += time.perf_counter() - start_compute_time
-#             iters_after_start = idx + 1 - num_warmup * int(idx >= num_warmup)
-#             seconds_per_img = total_compute_time / iters_after_start
-#             if idx >= num_warmup * 2 or seconds_per_img > 5:
-#                 total_seconds_per_img = (time.perf_counter() - start_time) / iters_after_start
-#                 eta = datetime.timedelta(seconds=int(total_seconds_per_img * (total - idx - 1)))
-#                 log_every_n_seconds(
-#                     logging.INFO,
-#                     "Loss on Validation  done {}/{}. {:.4f} s / img. ETA={}".format(
-#                         idx + 1, total, seconds_per_img, str(eta)
-#                     ),
-#                     n=5,
-#                 )
-#             loss_batch = self._get_loss(inputs)
-#             losses.append(loss_batch)
-#         mean_loss = np.mean(losses)
-#         self.trainer.storage.put_scalar('validation_loss', mean_loss)
-#         comm.synchronize()
-
-#         return losses
-            
-#     def _get_loss(self, data):
-#         # How loss is calculated on train_loop 
-#         metrics_dict = self._model(data)
-#         metrics_dict = {
-#             k: v.detach().cpu().item() if isinstance(v, torch.Tensor) else float(v)
-#             for k, v in metrics_dict.items()
-#         }
-#         total_losses_reduced = sum(loss for loss in metrics_dict.values())
-#         return total_losses_reduced
-        
-        
-#     def after_step(self):
-#         next_iter = self.trainer.iter + 1
-#         is_final = next_iter == self.trainer.max_iter
-#         if is_final or (self._period > 0 and next_iter % self._period == 0):
-#             self._do_loss_eval()
-#         self.trainer.storage.put_scalars(timetest=12)
-
 def main(args, dataset):
     cfg = make_cfg(args, cfg_type="train", dataset=dataset)
     os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
@@ -185,11 +117,10 @@ def parser_args():
     parser.add_argument("--lr", type=float, default=0.00025, help="base learning rate")
     parser.add_argument("--max-iter", type=int, default=1700, help="max iterations for training")
     parser.add_argument("--visualize", action="store_true", help="visualize instances. Use for debug only")
-    parser.add_argument("--data-path", type=str, default="/media/ws1/Data3/datasets/", help="parent dir of dataset for train/test")
-    parser.add_argument("--dataset", type=str, default="nvidia", help="prefix for datasets when registering with detectron2")
+    parser.add_argument("--data-path", type=str, default="/home/ananth/datasets/", help="parent dir of dataset for train/test")
+    parser.add_argument("--dataset", type=str, default="ycbv", help="prefix for datasets when registering with detectron2")
     parser.add_argument("--confidence", type=float, default=0.7, help="confidence threshold for instance detection")
     parser.add_argument("--initial", action="store_true", help="uses base mask r-cnn instead of output from prev. training")
-    parser.add_argument("--sps-path", type=str, default="../datasets/sps", help="path to sps dataset")
     args = parser.parse_args()
     return args
 
@@ -205,9 +136,9 @@ if __name__ == "__main__":
         elif args.dataset == "dopose":
             chunks = {}
             chunks["1"] = ["dopose_bin_train"]#, "dopose_table_train"]   
-        elif args.dataset == "sps":
+        elif args.dataset == "ycbv":
             chunks = {}
-            chunks["1"] = ["sps_synthetic_train"] 
+            chunks["1"] = ["ycbv_train"] 
         chunk_keys = sorted(chunks.keys())
         for key in chunk_keys:
             launch(

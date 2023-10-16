@@ -6,13 +6,15 @@ from detectron2 import model_zoo
 from detectron2.engine import DefaultPredictor
 from detectron2.config import get_cfg
 from detectron2.utils.visualizer import Visualizer
+import torch
 
+torch.cuda.empty_cache()
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--image-path", type=str, help="path rgb to image", default='../datasets/sps/rgb/0000.png')
     parser.add_argument("--model-path", type=str, help="path to class-agnostic model",
-                        default='../output/model_final.pth')
+                        default='../models/FAT_trained_Ml2R_bin_fine_tuned.pth')
     parser.add_argument("--visualize", action="store_true", help="visualize instances")
     args = parser.parse_args()
 
@@ -20,7 +22,7 @@ def main():
     args.image_path = os.path.abspath(args.image_path)
     args.model_path = os.path.abspath(args.model_path)
     
-    confidence = 0.85
+    confidence = 0.1
 
     cfg = get_cfg()
     cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")) # config file for mask r-cnn
@@ -37,7 +39,7 @@ def main():
     predictions = predictor(img)
     areas = predictions["instances"].pred_boxes.area()
     print(areas)
-    visualizer = Visualizer(img[:, :, ::-1], metadata={}, scale=0.5)
+    visualizer = Visualizer(img[:, :, ::-1], metadata={}, scale=1.0)
     out = visualizer.draw_instance_predictions(predictions["instances"].to("cpu"))
 
     if args.visualize:

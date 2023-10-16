@@ -14,7 +14,7 @@ def main():
     parser.add_argument("--data-path", type=str, help="path to dataset with rgb-d images",
                         default="../datasets/sps")
     parser.add_argument("--model-path", type=str, help="path to class-agnostic model",
-                        default='../output/model_final.pth')
+                        default='../models/FAT_trained_Ml2R_bin_fine_tuned.pth')
     parser.add_argument("--visualize", action="store_true", help="visualize instances")
     args = parser.parse_args()
 
@@ -22,7 +22,7 @@ def main():
     args.model_path = os.path.abspath(args.model_path)
     rgb_img_path = os.path.abspath(args.data_path) + "/rgb"
 
-    confidence = 0.9
+    confidence = 0.85
 
     cfg = get_cfg()
     cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")) # config file for mask r-cnn
@@ -49,7 +49,7 @@ def main():
             cv2.waitKey(0)
             cv2.destroyAllWindows()
         dataset_name = args.data_path.split("/")[-1]
-        savedir = "../results/" + dataset_name + "/ias"
+        savedir = "../results/" + dataset_name
         os.makedirs(savedir, exist_ok=True)
 
         cv2.imwrite(savedir + "/" + filename, seg_img)

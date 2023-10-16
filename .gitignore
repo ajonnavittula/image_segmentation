@@ -5,6 +5,7 @@ results/
 output/
 configs/
 exports/
+demos/
 # python compiles
 __pycache__/
 scripts/test.py
