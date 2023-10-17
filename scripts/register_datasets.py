@@ -31,16 +31,11 @@ def register_ycbv_dataset(path):
     path = os.path.join(path, "train_pbr")
     registered_datasets = []
     for folder in os.scandir(path):
-        folder = os.path.join(path, "000000")
         dataset_name = "ycbv_" + os.path.basename(folder) + "_train"
         annotation = os.path.join(folder, "scene_gt_coco.json")
-        # ann = json.load(open(annotation, "r"))
-        # print(annotation)
-        # aa
         if not dataset_name in DatasetCatalog.list():
             register_coco_instances(dataset_name, {}, annotation, folder)
             registered_datasets.append(dataset_name)
-            break
     return registered_datasets
 
 def register_nvidia_fat_dataset(path):
